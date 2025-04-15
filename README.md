@@ -1,65 +1,67 @@
-# Project1
+# Fine-Tuning Personalization in Federated Learning to Mitigate Adversarial Clients
 
-This repository contains the source code for our Neurips submission with the title 'Fine-Tuning Personalization in Federated Learning to Mitigate Adversarial Clients' .
+## Project Overview
 
-## Installation
+This repository contains a reproduction of the experimental results from the paper titled [Fine-Tuning Personalization in Federated Learning to Mitigate Adversarial Clients](https://nips.cc/virtual/2024/poster/94850).
 
+The project is done as part of the Distributed Deep Learning Systems course at the University of Bern. The goal of the project is to first reproduce the paper and secondly to come up with solutions to further improve performance metrics of it. 
 
-1. Navigate to the project directory:
+## Reproduction Setup
 
-    ```shell
-    cd PBML
-    ```
+The experiments were executed on the **UBELIX** high-performance computing cluster provided by the University of Bern. The following SLURM job file was used to reproduce the MNIST experiments:
 
-2. Install the required modules:
+**run_mnist.slurm**
 
-    ```shell
-    pip install -r requirements.txt
-    ```
-
-## Usage
-
-1. Navigate to the `src` folder:
-
-    ```shell
-    cd src
-    ```
-
-2. Run the main script with the desired command line arguments:
-
-```shell
-python3 main.py \
---dataset mnist \
---heterogeneity dirichlet_mnist \
---n 20 \
---m 64 \
---f 6 \
---T 5 \
---model cnn \
---lr 0.05 \
---attack SF \
---batch_size 64 \
---nb_main_client 2 \
---nb_run 5 \
---alpha 3.0 \
---nb_classes 10
 ```
-    
-3. The results will be saved under experiments folder. To combine multiple results in one figure, use replot_batch.py script (edit the part after if if __name__ == "__main__"). 
+#!/bin/bash
+#SBATCH --job-name=mnist_experiment
+#SBATCH --output=mnist_%j.out
+#SBATCH --error=mnist_%j.err
+#SBATCH --time=10:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=16G
+#SBATCH --partition=gpu
+#SBATCH --gpus-per-node=rtx3090:1
 
+# Load shell environment
+source ~/.bashrc
 
-## Reproducibility 
+# Navigate to your project directory
+cd /storage/homefs/ej24n024/ddls/IPBML
 
-To reproduce the mnsit results, run the following command:
-
-```shell
-run_mnist.py
-``` 
-
-To reproduce the phishing results, run the following command:
-
-```shell
-run_phishing.py
+# Run the MNIST experiment script
+python3 run_mnist.py
 ```
 
-The seeds are fixed in the scripts allow the exact reproduction of the results.
+Modify the following line to match the path to your own project directory:
+```
+cd /storage/homefs/ej24n024/ddls/IPBML
+```
+
+If you are not using UBELIX, you can run the experiments locally by simply executing:
+```
+python3 run_mnist.py
+```
+Note that with the specifications defined in the SLURM job file (RTX 3090 GPU, 16GB RAM, 4 CPUs), reproducing the results on UBELIX took approximately 4 hours. Running the experiments locally without similar resources may take significantly longer.
+
+## Experiment Parameters
+
+The script `run_mnist.py` automatically runs a series of federated learning experiments by looping over a grid of parameters:
+
+- Number of Byzantine clients: `f ∈ {0, 3, 6, 9}`
+- Number of clients per round: `m ∈ {8, 16}`
+- Dirichlet distribution parameter: `α ∈ {1.0, 3.0, 100}`
+
+Each unique configuration is repeated for **5 runs** (`nb_run = 5`) and trained for **100 communication rounds** (`T = 100`).
+
+This results in a total of **24 unique experiment setups** (2 values of `m` × 3 values of `alpha` × 4 values of `f`), with potential extra result folders due to multiple runs of the same configuration.
+
+## Reproduced Results
+
+All experiment outputs are saved in the directory:
+
+```
+experiments/mnist/dirichlet_mnist
+```

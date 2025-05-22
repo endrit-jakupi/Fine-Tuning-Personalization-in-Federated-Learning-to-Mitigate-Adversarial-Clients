@@ -1,4 +1,4 @@
-# Project1
+# Fine-Tuning Personalization in Federated Learning to Mitigate Adversarial Clients
 
 This repository contains the source code for our Neurips submission with the title 'Fine-Tuning Personalization in Federated Learning to Mitigate Adversarial Clients' .
 

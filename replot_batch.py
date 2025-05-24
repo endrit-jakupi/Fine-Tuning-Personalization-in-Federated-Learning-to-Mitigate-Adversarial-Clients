@@ -160,19 +160,19 @@ def stack_plots_byz(folders,n,m, alpha, data= "mnist_bin/dirichlet_mnist_bin"):
 
 
 if __name__ == "__main__":
-    f_values = [0,3,6,9]
-    m_values = [16,48]
-    alpha_values = [0.2, 0.3,0.4]
+    f_values = [0, 3, 6, 9]
+    m_values = [8, 16]
+    alpha_values = [1.0, 3.0, 100.0]
 
 
     for f in f_values:
         for alpha in alpha_values:
-            stack_plots_m([f"experiments/phishing/dirichlet_phishing_extreme/n_20_m_{m}_f_{f}_T_500_runs_5_alpha_{alpha}" for m in m_values], 20, f, alpha, data= "phishing/dirichlet_phishing_extreme")
+            stack_plots_m([f"experiments/mnist/dirichlet_mnist/NS/n_20_m_{m}_f_{f}_T_100_runs_5_alpha_{alpha}" for m in m_values], 20, f, alpha, data= "mnist/dirichlet_mnist/NS")
         
     for f in f_values:
         for m in m_values:
-            stack_plots_alpha([f"experiments/phishing/dirichlet_phishing_extreme/n_20_m_{m}_f_{f}_T_500_runs_5_alpha_{alpha}" for alpha in alpha_values], 20, f, m, data= "phishing/dirichlet_phishing_extreme")
+            stack_plots_alpha([f"experiments/mnist/dirichlet_mnist/NS/n_20_m_{m}_f_{f}_T_100_runs_5_alpha_{alpha}" for alpha in alpha_values], 20, f, m, data= "mnist/dirichlet_mnist/NS")
 
     for m in m_values:
         for alpha in alpha_values:
-            stack_plots_byz([f"experiments/phishing/dirichlet_phishing_extreme/n_20_m_{m}_f_{f}_T_500_runs_5_alpha_{alpha}" for f in f_values], 20, m, alpha, data = "phishing/dirichlet_phishing_extreme")
+            stack_plots_byz([f"experiments/mnist/dirichlet_mnist/NS/n_20_m_{m}_f_{f}_T_100_runs_5_alpha_{alpha}" for f in f_values], 20, m, alpha, data = "mnist/dirichlet_mnist/NS")
